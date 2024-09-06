@@ -7,14 +7,7 @@ async function loadFeatures() {
     if (response.ok) {
 
         const json = await response.json();
-
-
-        if (json.success) {
-      
-        } else {
-
-        }
-
+        console.log(json);
 
     } else {
 
