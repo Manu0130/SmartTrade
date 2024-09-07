@@ -66,7 +66,7 @@ public class SignUp extends HttpServlet {
                 int code = (int) (Math.random() * 1000000);
 
                 //save user
-                User user = new User();
+                final User user = new User();
                 user.setEmail(user_DTO.getEmail());
                 user.setFirst_name(user_DTO.getFirst_name());
                 user.setLast_name(user_DTO.getLast_name());

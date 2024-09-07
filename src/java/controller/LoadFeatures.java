@@ -53,7 +53,7 @@ public class LoadFeatures extends HttpServlet {
         List<Color> colorList = criteria3.list();
 
         Criteria criteria4 = session.createCriteria(Storage.class); //select *
-        criteria4.addOrder(Order.asc("value")); //set as ascending order
+        criteria4.addOrder(Order.asc("id")); //set as ascending order
         List<Storage> storageList = criteria4.list();
 
         Criteria criteria5 = session.createCriteria(Product_Condition.class); //select *
