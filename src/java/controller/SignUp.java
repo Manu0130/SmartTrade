@@ -75,15 +75,15 @@ public class SignUp extends HttpServlet {
                 session.save(user);
 
                 //send verification email
-                Thread sendMailThread = new Thread() {
-                    @Override
-                    public void run() {
-                        Mail.sendMail(user_DTO.getEmail(), "Smart Trade VERIFICATION",
-                                "<h1 style=\"color:#FF0000;\">Your Verification Code:" + user.getVerification() + "</h1>"
-                        ); 
-                    }
-
-                };
+//                Thread sendMailThread = new Thread() {
+//                    @Override
+//                    public void run() {
+//                        Mail.sendMail(user_DTO.getEmail(), "Smart Trade VERIFICATION",
+//                                "<h1 style=\"color:#FF0000;\">Your Verification Code:" + user.getVerification() + "</h1>"
+//                        ); 
+//                    }
+//
+//                };
 //                sendMailThread.start();
      
 

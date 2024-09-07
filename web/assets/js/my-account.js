@@ -72,7 +72,7 @@ async function productListing() {
     data.append("colorId", colorSelectTag.value);
     data.append("title", titleTag.value);
     data.append("description", descriptionTag.value);
-    data.append("conditionId", conditionSelectTag.value);    
+    data.append("conditionId", conditionSelectTag.value);
     data.append("price", priceTag.value);
     data.append("quantity", quantityTag.value);
     data.append("image1", image1Tag.files[0]);
@@ -87,18 +87,39 @@ async function productListing() {
             }
     );
     if (response.ok) {
+
         const json = await response.json();
-        console.log(json);
+
+        const popup = Notification();
+
         if (json.success) {
 
+            categorySelectTag.value = 0;
+            modelSelectTag.length = 1;
+            titleTag.value = "";
+            descriptionTag.value = "";
+            storageSelectTag.value = 0;
+            colorSelectTag.value = 0;
+            conditionSelectTag.value = 0;
+            priceTag.value = "";
+            quantityTag.value = "";
+            image1Tag.value = null;
+            image2Tag.value = null;
+            image3Tag.value = null;
 
+            popup.success({
+                message: json.content
+            });
 
         } else {
-            console.log(json.content);
+            popup.error({
+                message: json.content
+            });
+
         }
 
     } else {
-//        document.getElementById("message").innerHTML = "Please try again Later ";
+        document.getElementById("message").innerHTML = "Please try again Later ";
     }
 
 }
