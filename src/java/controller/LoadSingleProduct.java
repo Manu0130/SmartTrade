@@ -32,9 +32,10 @@ public class LoadSingleProduct extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        
+
         Gson gson = new Gson();
         Session session = HibernateUtil.getSessionFactory().openSession();
+        Response_DTO response_DTO = new Response_DTO();
         
         try {
 
@@ -42,12 +43,12 @@ public class LoadSingleProduct extends HttpServlet {
 
             if (Validations.isInteger(productId)) {
 
-                Product product = (Product) session.get(ProductListing.class, Integer.parseInt(productId)); //get product's object
+                Product product = (Product) session.get(Product.class, Integer.parseInt(productId)); //get product's object
 
                 product.getUser().setPassword(null);
                 product.getUser().setVerification(null);
                 product.getUser().setEmail(null);
-                
+
                 Criteria criteria1 = session.createCriteria(Model.class); //get model class
                 criteria1.add(Restrictions.eq("category", product.getModel().getCategory())); //අපි අරන් තියෙන model එකට අදාල category එක ගන්නවා.
                 List<Model> modelList = criteria1.list();
@@ -61,18 +62,18 @@ public class LoadSingleProduct extends HttpServlet {
                 for (Product product1 : productList) {
                     product1.getUser().setPassword(null);
                     product1.getUser().setVerification(null);
-                    product1.getUser().setEmail(null);                   
+                    product1.getUser().setEmail(null);
                 }
-                
+
                 JsonObject jsonObject = new JsonObject();
                 jsonObject.add("product", gson.toJsonTree(product));
                 jsonObject.add("productList", gson.toJsonTree(productList));
-                
+
                 response.setContentType("application/json");
-                response.getWriter().write(gson.toJson(productList));
+                response.getWriter().write(gson.toJson(jsonObject));
 
             } else {
-
+                response_DTO.setContent("Product Not Found");
             }
 
         } catch (Exception e) {
