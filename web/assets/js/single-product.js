@@ -141,6 +141,7 @@ async function addToCart(id, qty) {
             "AddToCart?id=" + id + "&qty=" + qty
             );
 
+
 const popup = Notification();
 
     if (response.ok) {

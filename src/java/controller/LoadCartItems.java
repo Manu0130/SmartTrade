@@ -52,12 +52,12 @@ public class LoadCartItems extends HttpServlet {
                 criteria1.add(Restrictions.eq("email", user_DTO.getEmail()));
                 User user = (User) criteria1.uniqueResult();
 
-                Criteria criteria2 = session.createCriteria(User.class);
+                Criteria criteria2 = session.createCriteria(Cart.class);
                 criteria2.add(Restrictions.eq("user", user));
 
-                List<Cart> cartList = criteria2.list();
+                List<Cart> CartList = criteria2.list();
 
-                for (Cart cart : cartList) {
+                for (Cart cart : CartList) {
 
                     Cart_DTO cart_DTO = new Cart_DTO();
 

@@ -44,25 +44,25 @@ async function loadCartItems() {
                             minimumFractionDigits: 2
                         }
                 ).format(item.product.price);
-                        cartItemRowClone.querySelector("#cart-item-qty").value = item.qty;
-                        cartItemRowClone.querySelector("#cart-item-subtotal").innerHTML = new Intl.NumberFormat(
+                cartItemRowClone.querySelector("#cart-item-qty").value = item.qty;
+                cartItemRowClone.querySelector("#cart-item-subtotal").innerHTML = new Intl.NumberFormat(
                         "en-US",
                         {
                             minimumFractionDigits: 2
                         }
                 ).format(itemSubTotal);
-        
-        cartItemContainer.appendChild(cartItemRowClone);
+
+                cartItemContainer.appendChild(cartItemRowClone);
 
             });
 
-                document.getElementById("cart-total-qty").innerHTML = totalQty;
-                document.getElementById("cart-total").innerHTML = new Intl.NumberFormat(
-                        "en-US",
-                        {
-                            minimumFractionDigits: 2
-                        }
-                ).format((total));
+            document.getElementById("cart-total-qty").innerHTML = totalQty;
+            document.getElementById("cart-total").innerHTML = new Intl.NumberFormat(
+                    "en-US",
+                    {
+                        minimumFractionDigits: 2
+                    }
+            ).format((total));
 
 
         }
