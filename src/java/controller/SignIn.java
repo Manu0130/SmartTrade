@@ -42,8 +42,9 @@ public class SignIn extends HttpServlet {
         } else if (user_DTO.getPassword().isEmpty()) {
             response_DTO.setContent("Please Enter Your Password");
         } else {
+            System.out.println("Hello 1");
             Session session = HibernateUtil.getSessionFactory().openSession();
-            
+            System.out.println("Hello 2");
             Criteria criteria1 = session.createCriteria(User.class);
             criteria1.add(Restrictions.eq("email", user_DTO.getEmail()));
             criteria1.add(Restrictions.eq("password", user_DTO.getPassword()));

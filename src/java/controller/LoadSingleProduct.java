@@ -55,7 +55,8 @@ public class LoadSingleProduct extends HttpServlet {
 
                 Criteria criteria2 = session.createCriteria(Product.class);
                 criteria2.add(Restrictions.in("model", modelList));
-                criteria2.setMaxResults(4);
+                criteria2.add(Restrictions.ne("id", product.getId()));
+                criteria2.setMaxResults(6);
 
                 List<Product> productList = criteria2.list();
 

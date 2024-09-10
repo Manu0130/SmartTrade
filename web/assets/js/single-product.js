@@ -44,16 +44,28 @@ async function loadProduct() {
             document.getElementById("product-storage").innerHTML = json.product.storage.value;
             document.getElementById("product-description").innerHTML = json.product.description;
 
-            let ProductHtml = document.getElementById("similer-product");
+            document.getElementById("add-to-cart-main").addEventListener(
+                    "click",
+                    (e) => {
+                addToCart(
+                        json.product.id,
+                        document.getElementById("add-to-cart-qty").value
+                        );
+                e.preventDefault();
+
+            });
+
+
+            let productHtml = document.getElementById("similer-product");
             document.getElementById("similer-product-main").innerHTML = "";
 
             json.productList.forEach(item => {
                 console.log(item.title);
-                
-                let productCloneHtml = ProductHtml.cloneNode(true);
+
+                let productCloneHtml = productHtml.cloneNode(true);
 
                 productCloneHtml.querySelector("#similer-product-a1").href = "single-product.html?id=" + item.id;
-                productCloneHtml.querySelector("#similer-product-image").src = "product-images/" + item.id + "/image1.png";
+//                productCloneHtml.querySelector("#similer-product-image").src = "product-images/" + item.id + "/image1.png";
                 productCloneHtml.querySelector("#similer-product-a2").href = "single-product.html?id=" + item.id;
                 productCloneHtml.querySelector("#similer-product-title").innerHTML = item.title;
                 productCloneHtml.querySelector("#similer-product-storage").innerHTML = item.storage.value;
@@ -65,6 +77,16 @@ async function loadProduct() {
                 ).format(item.price);
                 productCloneHtml.querySelector("#similer-product-color-border").style.borderColor = item.color.name;
                 productCloneHtml.querySelector("#similer-product-color").style.backgroundColor = item.color.name;
+
+                productCloneHtml.querySelector("#similer-product-add-to-cart").addEventListener(
+                        "click",
+                        (e) => {
+                    addToCart(item.id, 1);
+                    e.preventDefault();
+                }
+                );
+
+
 
                 document.getElementById("similer-product-main").appendChild(productCloneHtml);
                 //clone කරපු එකක් ඇතුලේ තියෙන එකක් ගන්නවා නම් query selector
@@ -109,6 +131,42 @@ async function loadProduct() {
         }
     } else {
         window.location = "index.html";
+    }
+
+}
+
+async function addToCart(id, qty) {
+
+    const response = await fetch(
+            "AddToCart?id=" + id + "&qty=" + qty
+            );
+
+const popup = Notification();
+
+    if (response.ok) {
+
+        const json = await response.json();
+
+        if (json.success) {
+
+            popup.success({
+                message: json.content
+            });
+
+        } else {
+
+            popup.error({
+                message: json.content
+            });
+
+        }
+
+    } else {
+
+        popup.error({
+            message: "Unable to process ur request"
+        });
+
     }
 
 }
