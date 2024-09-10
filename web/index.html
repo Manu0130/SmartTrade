@@ -13,6 +13,7 @@
 
         <!-- CSS
         ============================================ -->
+        <link href="assets/css/notification.css" rel="stylesheet"/>
 
         <!-- Bootstrap CSS -->
         <link rel="stylesheet" href="assets/css/vendor/bootstrap.min.css">
@@ -29,7 +30,7 @@
     </head>
 
 
-    <body class="sticky-header newsletter-popup-modal">
+    <body class="sticky-header newsletter-popup-modal" onload="checkSignIn();">
 
         <!--[if lte IE 9]>
         <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
@@ -62,10 +63,10 @@
                         </div>
                         <div class="col-sm-6">
                             <div class="header-top-link">
-                                <ul class="quick-link">
+                                <ul class="quick-link" id="st-quick-link">
                                     <li><a href="#">Help</a></li>
-                                    <li><a href="sign-up.html">Join Us</a></li>
-                                    <li><a href="sign-in.html">Sign In</a></li>
+                                    <li id="st-quick-link-li-1"><a href="sign-up.html">Join Us</a></li>
+                                    <li id="st-quick-link-li-2"><a href="sign-in.html">Sign In</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -120,7 +121,7 @@
                                             <li><a href="#">Menu-5-Item-1</a></li>
                                         </ul>
                                     </li>
-                                    <li><a href="#">Menu-6</a></li>
+                                    <li><a href="#" onclick="viewCart();">Open Cart</a></li>
                                 </ul>
                             </nav>
                             <!-- End Mainmanu Nav -->
@@ -161,9 +162,9 @@
                                             </li>
                                         </ul>
                                         <div class="login-btn">
-                                            <a href="sign-in.html" class="axil-btn btn-bg-primary">Login</a>
+                                            <a href="sign-in.html" class="axil-btn btn-bg-primary" id="st-button-1">Login</a>
                                         </div>
-                                        <div class="reg-footer text-center">No account yet? <a href="sign-up.html" class="btn-link">REGISTER HERE.</a></div>
+                                        <div id="st-div-1" class="reg-footer text-center">No account yet? <a href="sign-up.html" class="btn-link">REGISTER HERE.</a></div>
                                     </div>
                                 </li>
                                 <li class="axil-mobile-toggle">
@@ -179,39 +180,40 @@
             <!-- End Mainmenu Area -->
         </header>
 
-        <main class="main-wrapper">
+        <main class="main-wrapper" id="cart-main">
             <div class="axil-main-slider-area main-slider-style-1">
                 <div class="container">
                     <div class="row align-items-center">
                         <div class="col-lg-5 col-sm-6">
                             <div class="main-slider-content">
-                                <div class="slider-content-activation-one">
-                                    <div class="single-slide slick-slide" data-sal="slide-up" data-sal-delay="400" data-sal-duration="800">
+                                <div class="slider-content-activation-one" id="st-slide-container">
+                                    
+                                    <div id="st-single-slide" class="single-slide slick-slide" data-sal="slide-up" data-sal-delay="400" data-sal-duration="800">
                                         <span class="subtitle"><i class="fas fa-fire"></i> Hot Deal In This Week</span>
-                                        <h1 class="title">Product Title</h1>
+                                        <h1 class="title" id="st-product-title-1">Product Title</h1>
                                         <div class="slide-action">
                                             <div class="shop-btn">
-                                                <a href="#" class="axil-btn btn-bg-white"><i class="fal fa-shopping-cart"></i>Shop Now</a>
+                                                <a id="st-product-link-1" href="#" class="axil-btn btn-bg-white"><i class="fal fa-shopping-cart"></i>Shop Now</a>
                                             </div>
 
                                         </div>
                                     </div>
                                     <div class="single-slide slick-slide">
                                         <span class="subtitle"><i class="fas fa-fire"></i> Hot Deal In This Week</span>
-                                        <h1 class="title">Product Title</h1>
+                                        <h1 class="title" id="st-product-title-2">Product Title</h1>
                                         <div class="slide-action">
                                             <div class="shop-btn">
-                                                <a href="#" class="axil-btn btn-bg-white"><i class="fal fa-shopping-cart"></i>Shop Now</a>
+                                                <a id="st-product-link-2" href="#" class="axil-btn btn-bg-white"><i class="fal fa-shopping-cart"></i>Shop Now</a>
                                             </div>
 
                                         </div>
                                     </div>
                                     <div class="single-slide slick-slide">
                                         <span class="subtitle"><i class="fas fa-fire"></i> Hot Deal In This Week</span>
-                                        <h1 class="title">Product Title</h1>
+                                        <h1 class="title" id="st-product-title-3">Product Title</h1>
                                         <div class="slide-action">
                                             <div class="shop-btn">
-                                                <a href="#" class="axil-btn btn-bg-white"><i class="fal fa-shopping-cart"></i>Shop Now</a>
+                                                <a id="st-product-link-3" href="#" class="axil-btn btn-bg-white"><i class="fal fa-shopping-cart"></i>Shop Now</a>
                                             </div>
 
                                         </div>
@@ -224,24 +226,24 @@
                             <div class="main-slider-large-thumb">
                                 <div class="slider-thumb-activation-one axil-slick-dots">
                                     <div class="single-slide slick-slide" data-sal="slide-up" data-sal-delay="600" data-sal-duration="1500">
-                                        <img src="assets/images/product/main-01.png" alt="Product">
+                                        <img id="st-product-image-1" src="assets/images/product/main-01.png" alt="Product">
                                         <div class="product-price">
                                             <span class="text">From Rs.</span>
-                                            <span class="price-amount">0.00</span>
+                                            <span  id="st-product-price-1" class="price-amount">0.00</span>
                                         </div>
                                     </div>
                                     <div class="single-slide slick-slide" data-sal="slide-up" data-sal-delay="600" data-sal-duration="1500">
-                                        <img src="assets/images/product/main-02.png" alt="Product">
+                                        <img id="st-product-image-2" src="assets/images/product/main-02.png" alt="Product">
                                         <div class="product-price">
                                             <span class="text">From Rs.</span>
-                                            <span class="price-amount">0.00</span>
+                                            <span id="st-product-price-2" class="price-amount">0.00</span>
                                         </div>
                                     </div>
                                     <div class="single-slide slick-slide">
-                                        <img src="assets/images/product/main-03.png" alt="Product">
+                                        <img id="st-product-image-3" src="assets/images/product/main-03.png" alt="Product">
                                         <div class="product-price">
                                             <span class="text">From Rs.</span>
-                                            <span class="price-amount">0.00</span>
+                                            <span id="st-product-price-3" class="price-amount">0.00</span>
                                         </div>
                                     </div>
                                 </div>
@@ -904,7 +906,9 @@
 
         <!-- Main JS -->
         <script src="assets/js/main.js"></script>
-
+        <script src="assets/js/index.js"></script>
+        <script src="assets/js/cart.js"></script>
+      <script src="assets/js/notification.js"></script>
     </body>
 
 </html>
