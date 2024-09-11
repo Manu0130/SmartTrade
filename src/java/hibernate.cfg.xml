@@ -17,6 +17,11 @@
     <mapping class="entity.Product_Status"/>
     <mapping class="entity.Product"/>
     <mapping class="entity.Cart"/>
+    <mapping class="entity.City"/>
+    <mapping class="entity.Address"/>
+    <mapping class="entity.Order_Status"/>
+    <mapping class="entity.Orders"/>
+    <mapping class="entity.Order_Item"/>
   </session-factory>
 </hibernate-configuration>
 

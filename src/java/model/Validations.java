@@ -11,17 +11,17 @@ public class Validations {
     }
 
     public static boolean isDouble(String text) {
-        if (text == null) {
-            return false;
-        }
         return text.matches("^\\d+(\\.\\d{2})?$");
     }
 
     public static boolean isInteger(String text) {
-        if (text == null) {
-            return false;
-        }
+
         return text.matches("^\\d+$");
+    }
+
+    public static boolean isMobileNumberValid(String mobile) {
+        return mobile.matches("^07[01245678]{1}[0-9]{7}$");
+
     }
 
 }
