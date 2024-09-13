@@ -16,6 +16,7 @@ import entity.Product;
 import entity.User;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.List;
 import javax.servlet.ServletException;
@@ -25,6 +26,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import model.HibernateUtil;
+import model.PayHere;
 import model.Validations;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -169,7 +171,7 @@ public class Checkout extends HttpServlet {
 
                             session.save(address);
                             //***Complete the checkout process
-                            
+
                             saveOrders(session, transaction, user, address, responseJsonObject);
                         }
                     }
@@ -187,51 +189,109 @@ public class Checkout extends HttpServlet {
         response.getWriter().write(gson.toJson(responseJsonObject));
     }
 
-    private void saveOrders(Session session, Transaction transaction, User user, Address address, JsonObject responseJsonObject){
+    private void saveOrders(Session session, Transaction transaction, User user, Address address, JsonObject responseJsonObject) {
         try {
             //Create Order in DB
-                    entity.Orders order = new entity.Orders();
-                    order.setAddress(address);
-                    order.setDate_time(new Date());
-                    order.setUser(user);
+            entity.Orders order = new entity.Orders();
+            order.setAddress(address);
+            order.setDate_time(new Date());
+            order.setUser(user);
 
-                    session.save(order);
+            int order_id = (int) session.save(order);
 
-                    //Get Cart Items
-                    Criteria criteria4 = session.createCriteria(Cart.class);
-                    criteria4.add(Restrictions.eq("user", user));
-                    List<Cart> cartList = criteria4.list();
+            //Get Cart Items
+            Criteria criteria4 = session.createCriteria(Cart.class);
+            criteria4.add(Restrictions.eq("user", user));
+            List<Cart> cartList = criteria4.list();
 
-                    //get order status from db
-                    Order_Status order_Status = (Order_Status) session.get(Order_Status.class, 1);
+            //get order status (5. Pending Order) from db
+            Order_Status order_Status = (Order_Status) session.get(Order_Status.class, 5);
 
-                    //Create order in DB
-                    for (Cart cartItem : cartList) {
-                        //get product
-                        Product product = cartItem.getProduct();
-                        
-                        Order_Item order_Item = new Order_Item();                      
-                        order_Item.setOrder(order);
-                        order_Item.setOrder_status(order_Status);
-                        order_Item.setProduct(product);
-                        order_Item.setQty(cartItem.getQty());
-                        session.save(order_Item);
-                        
-                        //Update Product Qty in DB
-                        product.setQty(product.getQty() - cartItem.getQty());
-                        session.update(product);
-                        
-                        //Delete cart iteem from DB
-                        session.delete(cartItem);
-                    }
-                    
-                    transaction.commit();
-                    
-                    responseJsonObject.addProperty("success", true);
-                    responseJsonObject.addProperty("message", "Checkout Completed");
+            //Create order in DB
+            double amount = 0;
+            String items = "";
+            for (Cart cartItem : cartList) {
+
+                //calculate amount
+                amount += cartItem.getQty() * cartItem.getProduct().getPrice();
+                if (address.getCity().getId() == 1) {
+                    amount += 350;
+                } else {
+                    amount += 500;
+                }
+                //calculate amount
+
+                //get item details
+                items += cartItem.getProduct().getTitle() + " x" + cartItem.getQty() + " ";
+                //get item details
+
+                //get product
+                Product product = cartItem.getProduct();
+
+                Order_Item order_Item = new Order_Item();
+                order_Item.setOrder(order);
+                order_Item.setOrder_status(order_Status);
+                order_Item.setProduct(product);
+                order_Item.setQty(cartItem.getQty());
+                session.save(order_Item);
+
+                //Update Product Qty in DB
+                product.setQty(product.getQty() - cartItem.getQty());
+                session.update(product);
+
+                //Delete cart iteem from DB
+                session.delete(cartItem);
+            }
+
+            transaction.commit();
+
+            //Start : Set Payment Data
+            String merchant_id = "1222812";
+            String formatedAmount = new DecimalFormat("0.00").format(amount);
+            String currency = "LKR";
+            
+            String merchantSecret = "Mjg4NjY4MDU3MDM2MzU1NDc4OTMzNzgzMTg5OTAzNDA3MTEzMjU3Ng==";
+            String merchantSecretMD5Hash = PayHere.generateMD5(merchantSecret);
+
+            JsonObject payHere = new JsonObject();
+            payHere.addProperty("merchant_id", merchant_id);
+
+            payHere.addProperty("return_url", "");
+            payHere.addProperty("cancel_url", "");
+            payHere.addProperty("notify_url", ""
+//                    + "ngrock/project name/VerifyPayments"
+                    + "");
+
+            payHere.addProperty("first_name", user.getFirst_name());
+            payHere.addProperty("last_name", user.getLast_name());
+            payHere.addProperty("email", user.getEmail());
+            
+            payHere.addProperty("phone", "0711699998");
+            payHere.addProperty("address", "No 208 Pamunugama");
+            payHere.addProperty("city", "Panadura");
+            payHere.addProperty("country", "Sri Lanka");
+            
+            payHere.addProperty("order_id", String.valueOf(order_id));
+            payHere.addProperty("items", items);
+            payHere.addProperty("currency", currency);
+            payHere.addProperty("amount", formatedAmount);
+            payHere.addProperty("sandbox", true);
+
+            //End : Set Payment Data
+            //Generate MD5 Hash
+            String md5Hash = PayHere.generateMD5(merchant_id + order_id  + formatedAmount + currency + merchantSecretMD5Hash);
+            payHere.addProperty("hash", md5Hash);
+            //End: Generate MD5 Hash
+            
+            responseJsonObject.addProperty("success", true);
+            responseJsonObject.addProperty("message", "Checkout Completed");
+                       
+            Gson gson = new Gson();
+            responseJsonObject.add("payhereJson", gson.toJsonTree(payHere));
+            
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-    
+
 }

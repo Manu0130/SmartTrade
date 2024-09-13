@@ -79,7 +79,7 @@ public class LoadCheckout extends HttpServlet {
 
             //pack cart items in json object
             for (Cart cartObj : cartList) {
-                cartObj.setUser(null);
+                cartObj.setUser(null); 
                 cartObj.getProduct().setUser(null);
             }
             jsonObject.add("cartList", gson.toJsonTree(cartList));

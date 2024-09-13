@@ -29,7 +29,7 @@ public class Product implements Serializable {
     private int id;
 
     @ManyToOne
-    @JoinColumn(name = "condition_id")
+    @JoinColumn(name = "product_condition_id")
     private Product_Condition product_condition;
 
     @ManyToOne
